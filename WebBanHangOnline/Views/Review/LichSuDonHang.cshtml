@@ -1,0 +1,64 @@
+﻿@model IEnumerable<WebBanHangOnline.Models.EF.Order>
+@if (Model != null)
+{
+    var i = 1;
+    <h2 style="font-family: Verdana;">Lịch sử mua hàng</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td>STT</td>
+                <td>Mã đơn hàng</td>
+                <td>Tổng thanh toán</td>
+                <td>Phương thức thanh toán</td>
+                <td>Thời gian</td>
+                <td>Trạng thái đơn hàng</td>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@i</td>
+                    <td>@item.Code</td>
+                    <td>@WebBanHangOnline.Common.Common.FormatNumber(item.TotalAmount, 0)</td>
+                    <td>
+                        @if (item.TypePayment == 1)
+                        {
+                            @:Ship COD
+                        }
+                        else if (item.TypePayment == 2)
+                        {
+                            @:VNPAY
+                        }
+                        else
+                        {
+                            @:Không xác định
+                        }
+                    </td>
+                    <td>@item.CreatedDate.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        @if (item.Status == 1)
+                        {
+                            <span >Chờ xác nhận</span>
+                        }
+                        @if (item.Status == 2)
+                        {
+                            <span style="color: royalblue;">Đã xác nhận</span>
+                        }
+                        @if (item.Status == 3)
+                        {
+                            <span style="color: forestgreen;">Đang vận chuyển</span>
+                        }
+                        @if (item.Status == 4)
+                        {
+                            <span style="color: red;">Hoàn thành</span>
+                        }
+                    </td>
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>
+}

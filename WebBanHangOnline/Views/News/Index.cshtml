@@ -1,0 +1,225 @@
+﻿@model PagedList.PagedList<WebBanHangOnline.Models.EF.News>
+@using PagedList.Mvc;
+@using PagedList;
+@{
+    ViewBag.Title = "Tin tức";
+}
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css">
+<!-- Slider -->
+<style>
+    .news_section_container {
+        margin-top: 180px;
+    }
+
+    .row-item-new {
+        margin-bottom: 20px;
+        display: flex; /* Sử dụng Flexbox */
+        align-items: stretch; /* Đảm bảo các phần tử con có chiều cao bằng nhau */
+    }
+    .title-nav {
+        border-bottom: 1px solid;
+        padding: 15px 0;
+        margin-bottom: 25px;
+    }
+    .title-news {
+        font-size: 24px;
+        font-family: Verdana;
+        font-weight: bold;
+        
+    }
+
+    .img-box {
+        flex: 0 0 25%; /* Chiếm 25% chiều rộng */
+        max-height: 200px; /* Chiều cao tối đa cho hình ảnh */
+        overflow: hidden; /* Ẩn phần bên ngoài */
+    }
+
+    .img-box img {
+            max-width: 100%;
+            max-height: 100%;
+    }
+
+    .content-box {
+        flex: 1; /* Chiếm phần còn lại của chiều rộng */
+        flex-direction: column; /* Đặt nội dung theo chiều dọc */
+        justify-content: space-between; /* Đảm bảo khoảng cách giữa các phần tử */
+        height: 200px; /* Chiều cao cố định cho nội dung */
+    }
+    .page_current {
+        display: inline-block;
+        position: relative;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        cursor: pointer;
+        text-align: center;
+        border: solid 1px #ecedee;
+        margin-right: 16px;
+    }
+
+    .product_sorting_container_bottom .pages .page_current {
+        background: #fe4c50;
+        border: none;
+    }
+
+    .page_current {
+        display: inline-block;
+        position: relative;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        cursor: pointer;
+        text-align: center;
+        border: solid 1px #ecedee;
+        margin-right: 16px;
+    }
+
+    .product_sorting_container_bottom .pages .page_current {
+        background: #ff0000;
+        border: none;
+    }
+
+    .page_current span {
+        color: #51545f;
+    }
+
+    .product_sorting_container_bottom .pages .page_current span {
+        color: #FFFFFF;
+    }
+
+    .page_selection {
+        display: block;
+        position: absolute;
+        right: 0;
+        top: 120%;
+        margin: 0;
+        width: 100%;
+        background: #FFFFFF;
+        visibility: hidden;
+        opacity: 0;
+        z-index: 1;
+        box-shadow: 0 15px 25px rgba(63, 78, 100, 0.15);
+        -webkit-transition: opacity 0.3s ease;
+        -moz-transition: opacity 0.3s ease;
+        -o-transition: opacity 0.3s ease;
+        transition: all 0.3s ease;
+    }
+
+        .page_selection li {
+            display: block;
+            text-align: center;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+            .page_selection li a {
+                display: block;
+                height: 40px;
+                line-height: 40px;
+                border-bottom: solid 1px #dddddd;
+                color: #51545f;
+                -webkit-transition: opacity 0.3s ease;
+                -moz-transition: opacity 0.3s ease;
+                -o-transition: opacity 0.3s ease;
+                transition: all 0.3s ease;
+            }
+
+                .page_selection li a:hover {
+                    color: #b5aec4;
+                }
+
+    .page_current:hover .page_selection {
+        visibility: visible;
+        opacity: 1;
+        top: calc(100% + 1px);
+    }
+
+    .page_total {
+        display: inline-block;
+        line-height: 40px;
+        margin-right: 31px;
+    }
+
+        .page_total span {
+            margin-right: 14px;
+        }
+
+    .page_next {
+        display: inline-block;
+        line-height: 40px;
+        cursor: pointer;
+    }
+
+        .page_next:hover i {
+            color: #b5aec4;
+        }
+
+        .page_next i {
+            font-size: 18px;
+            color: #51545f;
+        }
+</style>
+<div class="container news_section_container">
+    <div  class="title-nav">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h1 class="title-news">Tin tức</h1>
+            </div>
+            <div class="col-md-6">
+                @using (Html.BeginForm("index", "News", FormMethod.Get, new { }))
+                {
+                    <div class="input-group input-group-sm float-right">
+                        @Html.TextBox("Searchtext", null, new { @class = "form-control" })
+                        <span class="input-group-append">
+                            <button type="submit" class="btn btn-info btn-flat">Tìm kiếm</button>
+                        </span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    @if (Model != null && Model.Any())
+    {
+        foreach (var item in Model)
+        {
+            <div class="row row-item-new">
+                <div class="col-md-3">
+                    <div class="img-box">
+                        <a href="/@item.Alias-n@(item.Id)" title="@item.Title"><img src="@item.Image" alt="@item.Title" /></a>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="content-box">
+                        <h3 style="font-family: Tahoma;"><a href="/@item.Alias-n@(item.Id)" title="@item.Title">@item.Title</a></h3>
+                        <div class="description-box">
+                            @item.Description
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="pages d-flex flex-row align-items-center">
+            <div class="page_current">
+                <span>@Model.PageNumber</span>
+                <ul class="page_selection">
+                    @for (int i = 1; i <= Model.PageCount; i++)
+                    {
+                        <li>
+                            <a href="@Url.Action("Index", new { page = i, Searchtext = Request["Searchtext"] })">@i</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="page_total"><span>of</span> @Model.PageCount</div>
+            @if (Model.HasNextPage)
+            {
+                <div id="next_page_1" class="page_next">
+                    <a href="@Url.Action("Index", new { page = Model.PageNumber + 1, Searchtext = Request["Searchtext"] })">
+                        <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+                    </a>
+                </div>
+            }
+        </div>
+    }
+
+</div>
